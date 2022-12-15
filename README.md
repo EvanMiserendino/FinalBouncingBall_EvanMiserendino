@@ -1,5 +1,5 @@
 # FinalBouncingBall_EvanMiserendino
-This was a Project for VIdeo#3 in CSCI 201. The edits I made to this Program Was:
+This was a Project for Video#3 in CSCI 201. The edits I made to this Program Was:
 1.Add a new audio sound from online. I converted it to an MP3 and added it to the program
 2. Changed the textbox to Hyperspeed! I also changed the colors of the balls to all ont color to match the textbox and give it a grey theme. 
 3. Changed the speed of the balls to make the appear extremely fast for the hyperspeed theme
