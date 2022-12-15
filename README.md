@@ -1,10 +1,158 @@
-# FinalBouncingBall_EvanMiserendino
-This was a Project for Video#3 in CSCI 201. The edits I made to this Program Was:
-1.Add a new audio sound from online. I converted it to an MP3 and added it to the program
-2. Changed the textbox to Hyperspeed! I also changed the colors of the balls to all ont color to match the textbox and give it a grey theme. 
-3. Changed the speed of the balls to make the appear extremely fast for the hyperspeed theme
-This Program contains music and balls going around super fast with the theme of hyperspeed. Below is screen shot of the program but the balls are really moving around and
-slamming into the wall. 
+function setup() {
+  createCanvas(600,400)
+}
+
+function draw() {
+  background(220)
+  image(img, 50, 50)
+}
 
 
-![IMG_4641 (2)](https://user-images.githubusercontent.com/120612604/207767529-f3bab877-2732-4e29-acc9-64caebc6b75d.jpg)
+
+const BOX_WIDTH  = 200;  // textbox dimensions
+const BOX_HEIGHT = 100;
+
+var balls = [];
+var sound;
+var testBall;
+
+function preload() {
+
+  sound = loadSound("Techno.mp3");  // preload the sound file
+}
+
+function setup() {
+
+//  createCanvas(windowWidth, windowHeight);
+  createCanvas(600,400)
+
+  
+  noStroke();
+  
+  //sound.play();    // play the audio file once
+  sound.loop();  // play the sound file repeatedly
+  
+  for (var ballNum = 0; ballNum < 10; ballNum++) {
+  	balls[ballNum] = new Ball();  
+  }
+
+  let y = height;
+  testBall = new Ball();
+  testBall.size = 50;
+  testBall.ballX = 220;  // if ballX == 225, the ball just slides over the right edge
+  testBall.ballY = 300;
+  testBall.red = 0;
+  testBall.red = 0;
+  testBall.red = 0;
+  testBall.speedX = 0;
+  testBall.speedY = 50;
+}
+
+function createBox() {
+  // prepare a box first
+  strokeWeight(4);
+  rect(0, 0, BOX_WIDTH, BOX_HEIGHT);
+  
+  textSize(32);           // size of the text (pixels)
+  fill(0, 102, 153);      // fill() takes R,G,B values as the color
+  // draw the text in the box (x,y,width,height) with the color in fill()
+  textAlign(CENTER);
+  text('Hyperspeed!', BOX_WIDTH/2, BOX_HEIGHT/2);   
+ 
+}
+
+function draw() {
+
+  background(255);
+  createBox();
+  
+  testBallMove();  // a special ball to test corner collision
+  
+  for (var ballNum = 0; ballNum < balls.length; ballNum++) {
+    balls[ballNum].display();
+    balls[ballNum].checkForHitWall();
+    balls[ballNum].checkForHitBox();
+    balls[ballNum].moveBall();
+    
+    if (mouseIsPressed) {
+      balls[ballNum].randomize()
+    }
+  }
+}
+
+function testBallMove() {
+  
+  testBall.display();
+  testBall.checkForHitWall();
+  testBall.checkForHitBox();
+  testBall.moveBall();
+}
+
+class Ball { // Constructor
+  
+  constructor() {
+    // initial position
+    this.ballX = random(100, width)
+    this.ballY = random(100, height)
+    
+    // Dictates velocity + direction
+    this.speedY = random(-50, 50);
+    this.speedX = random(-50, 50);
+    
+    this.size = random(100);
+    
+    // How transparent the ball is
+    this.alpha = 100
+    
+    // values for color
+    this.red   = random(100);
+    this.red = random(100);
+    this.red  = random(100)
+  }
+  
+  display() {
+    fill(this.red, this.red, this.red, this.alpha);
+    ellipse(this.ballX, this.ballY, this.size);
+  }
+  
+  randomize() {
+    this.speedY = random(-100, 100);
+    this.speedX = random(-100, 100);
+  }
+  
+  checkForHitWall() {
+  
+    let radius = this.size / 2;
+    if ((this.ballY+radius) > height || (this.ballY-radius) < 0) {
+  	  this.speedY = -this.speedY;  
+  	}
+    if ((this.ballX+radius) > width  || (this.ballX-radius) < 0) {
+      this.speedX = -this.speedX;  
+    }
+  }
+  
+  checkForHitBox() {
+    
+    let radius = this.size / 2;
+
+//    if (((this.ballX-radius) < BOX_WIDTH && (this.ballY-radius) < BOX_HEIGHT) || d < radius) {
+    if (((this.ballX-radius) < BOX_WIDTH && (this.ballY-radius) < BOX_HEIGHT)) {
+      // bump into the textbox, need to reverse direction
+      this.reverseBall();
+    }
+  }
+  
+  reverseBall() {
+    
+      this.speedX = -this.speedX;
+      this.speedY = -this.speedY;    
+  }
+  
+  moveBall() {
+
+    this.ballX += this.speedX;
+  	this.ballY += this.speedY;
+  }
+  
+}
+
